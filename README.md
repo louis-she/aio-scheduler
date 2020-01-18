@@ -2,15 +2,26 @@
 
 Async io scheduler based on redis(currently).
 
-# Installation
+### Installation
 
 ```
 pip install aio-scheduler
 ```
 
-# Usage
+### Usage
 
-In `sample.py`:
+
+1. Start the worker by
+```
+aio_scheduler start
+```
+
+2. Write sub class like `jobs/sample_job.py`
+
+3. Call `perform_at` on the `Job` instance like `sample.py` do to enqueue a job at specified datetime.
+
+
+`sample.py`:
 
 ```py
 import asyncio
@@ -34,7 +45,7 @@ if __name__ == '__main__':
 ```
 
 
-In `jobs/sample_job.py`
+`jobs/sample_job.py`
 ```py
 import asyncio
 from aio_scheduler import Job
