@@ -3,12 +3,15 @@ import sys
 import logging
 import os
 import asyncio
+import importlib
 
 import click
 from daemon import DaemonContext
 
+from .utils import maybe_await
 from .adapter import RedisAdapter
 from .job import Job
+from . import worker
 
 
 logging.basicConfig(level=logging.INFO)
@@ -21,15 +24,23 @@ def cli(): pass
 
 @cli.command('start')
 @click.option('--daemon', is_flag=True)
-def start(daemon=False):
+@click.option('--init-script')
+def start(daemon=False, init_script=False):
     async def main():
+        if init_script:
+            sys.path.insert(0, '.')
+            importlib.import_module(init_script)
         sys.path.insert(0, os.getcwd())
         Job.adapter = await RedisAdapter.create()
+
+        worker_instance = worker.worker_class()
+        maybe_await(worker_instance.initialize)
+
         if daemon:
             with DaemonContext():
-                await Job.start_loop()
+                await worker_instance.start()
         else:
-            await Job.start_loop()
+            await worker_instance.start()
     asyncio.run(main())
 
 

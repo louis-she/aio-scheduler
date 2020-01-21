@@ -30,7 +30,7 @@ class Job:
         return klass(uuid=data['uuid'], arguments=data['arguments'])
 
     @classmethod
-    async def start_loop(cls):
+    async def start(cls):
         while True:
             for encode in await cls.adapter.dequeue():
                 job = cls.deserialize(encode)
