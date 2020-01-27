@@ -4,7 +4,7 @@ import json
 from uuid import uuid4
 from datetime import datetime
 
-from .utils import maybe_await
+from .utils import maybe_future
 
 
 class Job:
@@ -48,7 +48,7 @@ class Job:
 
     async def execute(self):
         try:
-            maybe_await(self.perform, **self.arguments)
+            await maybe_future(self.perform(**self.arguments))
             self.logger.info(f'Job.{self.uuid} seccessfully processed')
         except Exception:
             self.logger.error(f'Failed to process Job.{self.uuid}', exc_info=True)

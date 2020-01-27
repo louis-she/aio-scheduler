@@ -8,7 +8,7 @@ import importlib
 import click
 from daemon import DaemonContext
 
-from .utils import maybe_await
+from .utils import maybe_future
 from .adapter import RedisAdapter
 from .job import Job
 from . import worker
@@ -32,7 +32,7 @@ def start(daemon=False, init_script=False):
             importlib.import_module(init_script)
 
         worker_instance = worker.worker_class()
-        maybe_await(worker_instance.initialize)
+        await maybe_future(worker_instance.initialize())
 
         if daemon:
             with DaemonContext():

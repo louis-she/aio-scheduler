@@ -1,6 +1,5 @@
 import asyncio
 
-from .utils import maybe_await
 from .job import Job
 
 
