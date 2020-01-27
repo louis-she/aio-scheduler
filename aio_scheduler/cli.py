@@ -30,8 +30,6 @@ def start(daemon=False, init_script=False):
         if init_script:
             sys.path.insert(0, '.')
             importlib.import_module(init_script)
-        sys.path.insert(0, os.getcwd())
-        Job.adapter = await RedisAdapter.create()
 
         worker_instance = worker.worker_class()
         maybe_await(worker_instance.initialize)
