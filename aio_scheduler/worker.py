@@ -10,6 +10,7 @@ class Worker:
 
     async def start(self):
         while True:
+            Job.logger.debug('checking redis')
             for encode in await Job.adapter.dequeue():
                 job = Job.deserialize(encode)
                 Job.logger.info(f'Get Job.{job.uuid}, encoded: {encode}')
