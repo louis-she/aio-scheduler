@@ -36,7 +36,7 @@ def start(daemon=False, init_script=False):
 
         if daemon:
             with DaemonContext():
-                await worker_instance.start()
+                asyncio.run(worker_instance.start())
         else:
             await worker_instance.start()
     asyncio.run(main())
