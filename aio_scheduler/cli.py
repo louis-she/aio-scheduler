@@ -33,13 +33,14 @@ def start(daemon=False, init_script=False):
 
         worker_instance = worker.worker_class()
         await maybe_future(worker_instance.initialize())
+        await worker_instance.start()
 
-        if daemon:
-            with DaemonContext():
-                asyncio.run(worker_instance.start())
-        else:
-            await worker_instance.start()
-    asyncio.run(main())
+    if daemon:
+        with DaemonContext(stderr=sys.stderr, working_directory=os.getcwd()):
+            asyncio.run(main())
+    else:
+        asyncio.run(main())
+
 
 
 if __name__ == "__main__":
