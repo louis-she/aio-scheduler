@@ -16,6 +16,12 @@ class Job:
         self.arguments = arguments
         self.uuid = uuid if uuid else uuid4().hex
 
+    def before_perform(self, *args, **kwargs):
+        pass
+
+    def after_perform(self, *args, **kwargs):
+        pass
+
     async def perform_at(self, at: datetime, **arguments):
         self.arguments = arguments
         await self.adapter.enqueue(
@@ -60,7 +66,9 @@ class Job:
 
     async def execute(self):
         try:
+            await maybe_future(self.before_perform(**self.arguments))
             await maybe_future(self.perform(**self.arguments))
+            await maybe_future(self.after_perform(**self.arguments))
             self.logger.info(f'Job.{self.uuid} seccessfully processed')
         except Exception as e:
             self.logger.error(f'Failed to process Job.{self.uuid}', exc_info=True)
