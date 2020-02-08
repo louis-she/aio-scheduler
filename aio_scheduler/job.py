@@ -40,6 +40,12 @@ class Job:
             activate_at=int(datetime.timestamp(datetime.now() + delta)),
             encode=self.serialize())
 
+    async def perform_async(**arguments):
+        await self.adapter.enqueue(
+            activate_at=int(datetime.timestamp(datetime.now())),
+            encode=self.serialize()
+        )
+
     @classmethod
     def deserialize(cls, encoded: str):
         data = json.loads(encoded)
