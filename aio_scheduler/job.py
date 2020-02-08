@@ -40,7 +40,8 @@ class Job:
             activate_at=int(datetime.timestamp(datetime.now() + delta)),
             encode=self.serialize())
 
-    async def perform_async(**arguments):
+    async def perform_async(self, **arguments):
+        self.arguments = arguments
         await self.adapter.enqueue(
             activate_at=int(datetime.timestamp(datetime.now())),
             encode=self.serialize()
