@@ -12,7 +12,7 @@ class Job:
     adapter = None
     logger = None
 
-    def __init__(self, uuid=None, arguments: dict = {}):
+    def __init__(self, uuid=None, **arguments):
         self.arguments = arguments
         self.uuid = uuid if uuid else uuid4().hex
 
