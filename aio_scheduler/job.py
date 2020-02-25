@@ -52,7 +52,7 @@ class Job:
         data = json.loads(encoded)
         module = importlib.import_module(data['module'], data['class'])
         klass = getattr(module, data['class'])
-        return klass(uuid=data['uuid'], arguments=data['arguments'])
+        return klass(uuid=data['uuid'], **data['arguments'])
 
     @classmethod
     async def start(cls):
