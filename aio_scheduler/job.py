@@ -23,7 +23,7 @@ class Job:
         pass
 
     async def perform_at(self, at: datetime, **arguments):
-        self.arguments = arguments
+        self.arguments.update(arguments)
         await self.adapter.enqueue(
             activate_at=int(datetime.timestamp(at)),
             encode=self.serialize())
@@ -35,13 +35,13 @@ class Job:
             days=days, seconds=seconds, microseconds=microseconds,
             milliseconds=milliseconds, minutes=minutes, hours=hours,
             weeks=weeks)
-        self.arguments = arguments
+        self.arguments.update(arguments)
         await self.adapter.enqueue(
             activate_at=int(datetime.timestamp(datetime.now() + delta)),
             encode=self.serialize())
 
     async def perform_async(self, **arguments):
-        self.arguments = arguments
+        self.arguments.update(arguments)
         await self.adapter.enqueue(
             activate_at=int(datetime.timestamp(datetime.now())),
             encode=self.serialize()
@@ -84,5 +84,5 @@ class Job:
     async def handle_exception(self, e):
         pass
 
-    def perform(self):
+    def perform(self, *args, **kwargs):
         raise NotImplementedError
