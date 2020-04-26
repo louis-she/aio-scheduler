@@ -73,10 +73,10 @@ class Job:
 
     async def execute(self):
         try:
-            await maybe_future(self.before_perform(**self.arguments))
-            await maybe_future(self.perform(**self.arguments))
-            await maybe_future(self.after_perform(**self.arguments))
+            await asyncio.wait_for(self._perform(), 30)
             self.logger.info(f'Job.{self.uuid} seccessfully processed')
+        except asyncio.TimeoutError:
+            self.logger.error(f'Job.{self.uuid} timeout')
         except Exception as e:
             self.logger.error(f'Failed to process Job.{self.uuid}', exc_info=True)
             await maybe_future(self.handle_exception(e))
@@ -86,3 +86,8 @@ class Job:
 
     def perform(self, *args, **kwargs):
         raise NotImplementedError
+
+    async def _perform(self):
+        await maybe_future(self.before_perform(**self.arguments))
+        await maybe_future(self.perform(**self.arguments))
+        await maybe_future(self.after_perform(**self.arguments))

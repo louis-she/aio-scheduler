@@ -1,12 +1,13 @@
 import asyncio
 
 from .job import Job
+from .adapter import RedisAdapter
 
 
 class Worker:
 
-    def initialize(self):
-        pass
+    async def initialize(self):
+        Job.adapter = await RedisAdapter.create()
 
     async def start(self):
         while True:
