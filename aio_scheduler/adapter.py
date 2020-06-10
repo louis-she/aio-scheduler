@@ -11,6 +11,9 @@ class BaseAdapter:
     def dequeue(self):
         raise NotImplementedError
 
+    def clean(self):
+        pass
+
 
 class RedisAdapter(BaseAdapter):
 
@@ -37,3 +40,7 @@ class RedisAdapter(BaseAdapter):
             max=datetime.timestamp(time)
         )
         return records
+
+    async def clean(self):
+        self.redis.close()
+        await self.redis.wait_closed()

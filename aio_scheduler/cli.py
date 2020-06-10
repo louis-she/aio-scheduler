@@ -37,10 +37,9 @@ def start(daemon=False, init_script=False):
 
     if daemon:
         with DaemonContext(stderr=sys.stderr, stdout=sys.stdout, working_directory=os.getcwd()):
-            asyncio.run(main())
+            asyncio.get_event_loop().run_until_complete(main())
     else:
-        asyncio.run(main())
-
+        asyncio.get_event_loop().run_until_complete(main())
 
 
 if __name__ == "__main__":
