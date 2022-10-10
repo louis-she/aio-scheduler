@@ -77,11 +77,15 @@ class Job:
             self.logger.info(f'Job.{self.uuid} seccessfully processed')
         except asyncio.TimeoutError:
             self.logger.error(f'Job.{self.uuid} timeout')
+            await maybe_future(self.handle_timeout())
         except Exception as e:
             self.logger.error(f'Failed to process Job.{self.uuid}', exc_info=True)
             await maybe_future(self.handle_exception(e))
 
     async def handle_exception(self, e):
+        pass
+
+    async def handle_timeout(self):
         pass
 
     def perform(self, *args, **kwargs):
