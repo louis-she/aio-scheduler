@@ -16,6 +16,10 @@ class Job:
         self.arguments = arguments
         self.uuid = uuid if uuid else uuid4().hex
 
+    @property
+    def timeout(self):
+        return 30
+
     def before_perform(self, *args, **kwargs):
         pass
 
@@ -73,7 +77,7 @@ class Job:
 
     async def execute(self):
         try:
-            await asyncio.wait_for(self._perform(), 30)
+            await asyncio.wait_for(self._perform(), self.timeout)
             self.logger.info(f'Job.{self.uuid} seccessfully processed')
         except asyncio.TimeoutError:
             self.logger.error(f'Job.{self.uuid} timeout')
