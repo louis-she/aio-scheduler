@@ -53,7 +53,7 @@ async def main():
     await SampleJob(message='Hey from worker').perform_async()
 
     # perform job in tomorrow
-    await SampleJob(message='Hey from the future').perform_at(datetime.now() + timedelta(days=1))
+    await SampleJob(message='Hey from the future').perform_at(datetime.utcnow() + timedelta(days=1))
 
 
 if __name__ == '__main__':

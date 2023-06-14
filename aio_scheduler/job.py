@@ -41,13 +41,13 @@ class Job:
             weeks=weeks)
         self.arguments.update(arguments)
         await self.adapter.enqueue(
-            activate_at=int(datetime.timestamp(datetime.now() + delta)),
+            activate_at=int(datetime.timestamp(datetime.utcnow() + delta)),
             encode=self.serialize())
 
     async def perform_async(self, **arguments):
         self.arguments.update(arguments)
         await self.adapter.enqueue(
-            activate_at=int(datetime.timestamp(datetime.now())),
+            activate_at=int(datetime.timestamp(datetime.utcnow())),
             encode=self.serialize()
         )
 

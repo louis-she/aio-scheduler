@@ -30,7 +30,7 @@ class RedisAdapter(BaseAdapter):
 
     async def dequeue(self, time: datetime = None):
         if time is None:
-            time = datetime.now()
+            time = datetime.utcnow()
         records = await self.redis.zrangebyscore(
             self.scheduled_jobs_key,
             max=datetime.timestamp(time),

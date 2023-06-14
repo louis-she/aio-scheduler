@@ -9,9 +9,9 @@ async def main():
     Job.adapter = await RedisAdapter.create()
 
     # execute job right away
-    await SampleJob().perform_at(datetime.now(), message='Hey')
+    await SampleJob().perform_at(datetime.utcnow(), message='Hey')
     # execute job tomorrow
-    await SampleJob().perform_at(datetime.now() + timedelta(days=1), message='Hey in tomorrow')
+    await SampleJob().perform_at(datetime.utcnow() + timedelta(days=1), message='Hey in tomorrow')
 
 
 if __name__ == '__main__':
